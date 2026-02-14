@@ -9,8 +9,14 @@ Express.js REST API using ES modules with Neon PostgreSQL database and Drizzle O
 ## Commands
 
 ```bash
-# Development
+# Development (local)
 npm run dev          # Start server with watch mode
+
+# Development (Docker with Neon Local)
+docker compose -f docker-compose.dev.yml up --build
+
+# Production (Docker with Neon Cloud)
+docker compose -f docker-compose.prod.yml up --build -d
 
 # Linting & Formatting
 npm run lint         # Run ESLint

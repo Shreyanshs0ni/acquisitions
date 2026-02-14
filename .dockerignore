@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# Neon Local
+.neon_local/
+
+# IDE
+.idea/
+.vscode/
+
+# Documentation
+*.md
+!README.md
+
+# Docker files (don't need to copy into image)
+docker-compose*.yml
+Dockerfile
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+tests/
+coverage/

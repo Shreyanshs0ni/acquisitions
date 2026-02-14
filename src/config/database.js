@@ -1,10 +1,27 @@
 import 'dotenv/config';
 
-import { neon, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+const isProduction = process.env.NODE_ENV === 'production';
 
-const sql = neon(process.env.DATABASE_URL);
+let db;
+let sql;
 
-const db = drizzle(sql);
+if (isProduction) {
+  // Production → Neon cloud → HTTP driver
+  const { neon } = await import('@neondatabase/serverless');
+  const { drizzle } = await import('drizzle-orm/neon-http');
 
-export { db, sql };
+  sql = neon(process.env.DATABASE_URL);
+  db = drizzle(sql);
+} else {
+  // Development (Docker) → TCP Postgres → node-postgres driver
+  const { drizzle } = await import('drizzle-orm/node-postgres');
+  const pg = await import('pg');
+
+  const pool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+
+  db = drizzle(pool);
+}
+
+export { db };

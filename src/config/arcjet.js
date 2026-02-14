@@ -1,16 +1,14 @@
-import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/node";
-
+import arcjet, { shield, detectBot, tokenBucket } from '@arcjet/node';
 
 const aj = arcjet({
   key: process.env.ARCJET_KEY,
   rules: [
-    shield({ mode: "LIVE" }),
+    shield({ mode: 'LIVE' }),
     detectBot({
-      mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE"],
+      mode: process.env.NODE_ENV === 'production' ? 'LIVE' : 'DRY_RUN',
+      allow: ['CATEGORY:SEARCH_ENGINE'],
     }),
   ],
 });
-
 
 export default aj;

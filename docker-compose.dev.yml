@@ -1,0 +1,35 @@
+# Development Docker Compose with Neon Local
+# Creates ephemeral database branches for isolated development
+
+services:
+  # Neon Local proxy - creates ephemeral branches from your Neon cloud database
+  db:
+    image: neondatabase/neon_local:latest
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.development
+    volumes:
+      - ./.neon_local/:/tmp/.neon_local          # Persist branch metadata
+      - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent # Persist branch per Git branch
+
+
+  # Express.js application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file:
+      - .env.development
+    volumes:
+      - ./src:/app/src:ro           # Mount source for development (read-only)
+      - ./logs:/app/logs            # Persist logs
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  neon_local_data:
