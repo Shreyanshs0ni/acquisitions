@@ -35,17 +35,20 @@ This document explains how to run the Acquisitions API with Docker in both devel
 ### Development (with Neon Local)
 
 1. **Copy and configure environment file:**
+
    ```bash
    cp .env.development .env
    ```
 
 2. **Edit `.env` with your Neon credentials:**
+
    ```env
    NEON_API_KEY=your_neon_api_key_here
    NEON_PROJECT_ID=your_neon_project_id_here
    ```
 
 3. **Start the development environment:**
+
    ```bash
    docker compose -f docker-compose.dev.yml up --build
    ```
@@ -62,22 +65,26 @@ This document explains how to run the Acquisitions API with Docker in both devel
 ### Production (with Neon Cloud)
 
 1. **Copy and configure environment file:**
+
    ```bash
    cp .env.production .env
    ```
 
 2. **Edit `.env` with your production credentials:**
+
    ```env
    DATABASE_URL=postgres://user:password@ep-xxxxx.region.aws.neon.tech/dbname?sslmode=require
    JWT_SECRET=your_secure_production_secret
    ```
 
 3. **Start production:**
+
    ```bash
    docker compose -f docker-compose.prod.yml up --build -d
    ```
 
 4. **View logs:**
+
    ```bash
    docker compose -f docker-compose.prod.yml logs -f
    ```
@@ -91,21 +98,21 @@ This document explains how to run the Acquisitions API with Docker in both devel
 
 ### Development (.env.development)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `NEON_API_KEY` | Neon API key for authentication | ✅ |
-| `NEON_PROJECT_ID` | Your Neon project ID | ✅ |
-| `PARENT_BRANCH_ID` | Parent branch for ephemeral branches | ❌ |
-| `DELETE_BRANCH` | Delete branch on container stop (default: true) | ❌ |
-| `JWT_SECRET` | JWT signing secret | ❌ (has default) |
+| Variable           | Description                                     | Required         |
+| ------------------ | ----------------------------------------------- | ---------------- |
+| `NEON_API_KEY`     | Neon API key for authentication                 | ✅               |
+| `NEON_PROJECT_ID`  | Your Neon project ID                            | ✅               |
+| `PARENT_BRANCH_ID` | Parent branch for ephemeral branches            | ❌               |
+| `DELETE_BRANCH`    | Delete branch on container stop (default: true) | ❌               |
+| `JWT_SECRET`       | JWT signing secret                              | ❌ (has default) |
 
 ### Production (.env.production)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | Full Neon connection string | ✅ |
-| `JWT_SECRET` | JWT signing secret (use strong value!) | ✅ |
-| `LOG_LEVEL` | Logging level (default: info) | ❌ |
+| Variable       | Description                            | Required |
+| -------------- | -------------------------------------- | -------- |
+| `DATABASE_URL` | Full Neon connection string            | ✅       |
+| `JWT_SECRET`   | JWT signing secret (use strong value!) | ✅       |
+| `LOG_LEVEL`    | Logging level (default: info)          | ❌       |
 
 ## How Neon Local Works
 
@@ -191,6 +198,7 @@ docker compose -f docker-compose.dev.yml up --build --force-recreate
 ### "Cannot connect to database"
 
 1. Check that Neon Local container is healthy:
+
    ```bash
    docker compose -f docker-compose.dev.yml ps
    ```
@@ -205,6 +213,7 @@ docker compose -f docker-compose.dev.yml up --build --force-recreate
 ### "Database branch not found"
 
 The ephemeral branch may have been deleted. Restart the containers:
+
 ```bash
 docker compose -f docker-compose.dev.yml down
 docker compose -f docker-compose.dev.yml up
@@ -213,11 +222,13 @@ docker compose -f docker-compose.dev.yml up
 ### Mac Docker Desktop: gRPC FUSE Issue
 
 If using Docker Desktop for Mac, ensure VM settings use gRPC FUSE instead of VirtioFS:
+
 - Docker Desktop → Settings → General → Virtual Machine Options
 
 ### Port 5432 Already in Use
 
 Stop any local PostgreSQL instances:
+
 ```bash
 # macOS with Homebrew
 brew services stop postgresql

@@ -10,9 +10,8 @@ services:
     env_file:
       - .env.development
     volumes:
-      - ./.neon_local/:/tmp/.neon_local          # Persist branch metadata
+      - ./.neon_local/:/tmp/.neon_local # Persist branch metadata
       - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent # Persist branch per Git branch
-
 
   # Express.js application
   app:
@@ -25,8 +24,8 @@ services:
     env_file:
       - .env.development
     volumes:
-      - ./src:/app/src:ro           # Mount source for development (read-only)
-      - ./logs:/app/logs            # Persist logs
+      - ./src:/app/src:ro # Mount source for development (read-only)
+      - ./logs:/app/logs # Persist logs
     depends_on:
       - db
     restart: unless-stopped

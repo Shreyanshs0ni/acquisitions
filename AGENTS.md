@@ -33,9 +33,11 @@ npm run db:studio    # Open Drizzle Studio GUI
 ## Architecture
 
 ### Request Flow
+
 Routes → Controllers → Services → Models (Drizzle schemas)
 
 ### Directory Structure
+
 - `src/routes/` - Express route definitions (e.g., `auth.routes.js`)
 - `src/controllers/` - Request handlers, validation, response formatting
 - `src/services/` - Business logic, database operations
@@ -46,7 +48,9 @@ Routes → Controllers → Services → Models (Drizzle schemas)
 - `drizzle/` - Generated SQL migrations
 
 ### Import Aliases
+
 Use `#` prefix aliases instead of relative paths:
+
 ```javascript
 import { db } from '#config/database.js';
 import { users } from '#models/user.model.js';
@@ -59,6 +63,7 @@ Available aliases: `#config/*`, `#controllers/*`, `#middleware/*`, `#models/*`, 
 ## Key Patterns
 
 ### Adding a New Feature
+
 1. Define Drizzle schema in `src/models/`
 2. Run `npm run db:generate` then `npm run db:migrate`
 3. Create Zod validation schema in `src/validations/`
@@ -67,15 +72,19 @@ Available aliases: `#config/*`, `#controllers/*`, `#middleware/*`, `#models/*`, 
 6. Add routes in `src/routes/` and register in `app.js`
 
 ### Validation
+
 Use Zod's `safeParse()` in controllers with `formatValidationError()` from `#utils/format.js` for error responses.
 
 ### Database Queries
+
 Use Drizzle ORM query builder. Database connection is exported from `#config/database.js` as `db`.
 
 ### Logging
+
 Use Winston logger from `#config/logger.js`. Logs written to `logs/error.log` and `logs/combined.log`.
 
 ## Code Style
+
 - 2-space indentation, single quotes, semicolons required
 - Prefer `const`, no `var`, use arrow functions
 - Prefix unused parameters with `_` (e.g., `(_req, res)`)
