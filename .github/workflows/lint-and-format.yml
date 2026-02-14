@@ -1,0 +1,68 @@
+name: Lint and Format
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  lint-and-format:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        id: eslint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run Prettier check
+        id: prettier
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Annotate ESLint issues
+        if: steps.eslint.outcome == 'failure'
+        run: |
+          echo "::error::ESLint found issues in your code."
+          echo "::notice::Run 'npm run lint:fix' locally to automatically fix ESLint issues."
+
+      - name: Annotate Prettier issues
+        if: steps.prettier.outcome == 'failure'
+        run: |
+          echo "::error::Prettier found formatting issues in your code."
+          echo "::notice::Run 'npm run format' locally to automatically fix formatting issues."
+
+      - name: Fail if issues found
+        if: steps.eslint.outcome == 'failure' || steps.prettier.outcome == 'failure'
+        run: |
+          echo "## ❌ Lint and Format Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.eslint.outcome }}" == "failure" ]; then
+            echo "- **ESLint**: Found issues. Run \`npm run lint:fix\` to fix." >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ steps.prettier.outcome }}" == "failure" ]; then
+            echo "- **Prettier**: Found formatting issues. Run \`npm run format\` to fix." >> $GITHUB_STEP_SUMMARY
+          fi
+          exit 1
+
+      - name: Success summary
+        if: steps.eslint.outcome == 'success' && steps.prettier.outcome == 'success'
+        run: |
+          echo "## ✅ Lint and Format Check Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **ESLint**: No issues found" >> $GITHUB_STEP_SUMMARY
+          echo "- **Prettier**: Code is properly formatted" >> $GITHUB_STEP_SUMMARY

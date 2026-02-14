@@ -931,3 +931,9 @@
 {"level":"info","message":"::1 - - [14/Feb/2026:19:08:24 +0000] \"POST /api/auth/sign-in HTTP/1.1\" 200 127 \"-\" \"HTTPie\"","service":"aquisutions-api"}
 {"level":"info","message":"Deleting user: 2","service":"aquisutions-api"}
 {"level":"info","message":"::1 - - [14/Feb/2026:19:09:05 +0000] \"DELETE /api/users/2 HTTP/1.1\" 200 39 \"-\" \"HTTPie\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:36:19 +0000] \"GET /health HTTP/1.1\" 200 75 \"-\" \"-\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:36:19 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:36:19 +0000] \"GET /nonexistent HTTP/1.1\" 404 27 \"-\" \"-\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:54:10 +0000] \"GET /health HTTP/1.1\" 200 75 \"-\" \"-\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:54:10 +0000] \"GET /api HTTP/1.1\" 200 41 \"-\" \"-\"","service":"aquisutions-api"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/Feb/2026:19:54:10 +0000] \"GET /nonexistent HTTP/1.1\" 404 27 \"-\" \"-\"","service":"aquisutions-api"}
