@@ -13,14 +13,26 @@ export const hashPassword = async password => {
   }
 };
 
+export const comparePassword = async (password, hashedPassword) => {
+  try {
+    return await bcrypt.compare(password, hashedPassword);
+  } catch (e) {
+    logger.error(`Error comparing password: ${e}`);
+    throw new Error('Error comparing password');
+  }
+};
+
 export const createUser = async ({ name, email, password, role = 'user' }) => {
   try {
-    const existingUser = db
+    const existingUser = await db
       .select()
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
-    if (existingUser.length > 0) throw new Error('User already exists');
+
+    if (existingUser.length > 0) {
+      throw new Error('User already exists');
+    }
 
     const passwordHash = await hashPassword(password);
 
@@ -32,13 +44,44 @@ export const createUser = async ({ name, email, password, role = 'user' }) => {
         name: users.name,
         email: users.email,
         role: users.role,
-        created_at: users.created_at,
+        created_at: users.createdAt,
       });
 
     logger.info(`Successfully created user: ${newUser.id}`);
     return newUser;
   } catch (e) {
     logger.error(`Error creating user: ${e}`);
+    throw e;
+  }
+};
+
+export const authenticateUser = async (email, password) => {
+  try {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const isPasswordValid = await comparePassword(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new Error('Invalid password');
+    }
+
+    logger.info(`User authenticated: ${user.id}`);
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+  } catch (e) {
+    logger.error(`Error authenticating user: ${e}`);
     throw e;
   }
 };
